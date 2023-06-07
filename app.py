@@ -10,7 +10,6 @@ from sklearn.linear_model import LinearRegression
 
 def main():
     st.title('대학생 행동 분석 앱')
-    st.title('테스트')
 
     df = pd.read_csv('data/bot_detection_data2.csv')
     df1 = pd.read_csv('data/bot_detection_data.csv')
