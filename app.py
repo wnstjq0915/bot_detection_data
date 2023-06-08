@@ -87,7 +87,7 @@ def main():
         sns.heatmap(data=df_1_corr, annot=True, vmin=-1, vmax=1, cmap='coolwarm', fmt='.2f', linewidths=1)
         st.pyplot(fig)
 
-
+        st.dataframe(df.corr(numeric_only=True))
 
 
         st.subheader('상관관계')
