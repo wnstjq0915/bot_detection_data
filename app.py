@@ -75,6 +75,15 @@ def main():
             st.text(f'{i}의 {select_calcul}: {eval(calculator[select_calcul])}')
 
 
+        st.header('원본 상관관계')
+        st.dataframe(df_1)
+
+        fig = plt.figure()
+        df_1_corr = df_1.corr(numeric_only=True)
+        sns.heatmap(data=df1_corr, annot=True, vmin=-1, vmax=1, cmap='coolwarm', fmt='.2f', linewidths=1, mask=mask1)
+        st.pyplot(fig)
+
+
 
 
         st.subheader('상관관계')
