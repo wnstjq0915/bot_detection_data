@@ -12,7 +12,7 @@ def main():
     st.title('대학생 행동 분석 앱')
 
     df = pd.read_csv('data/bot_detection_data2.csv')
-    df1 = pd.read_csv('data/bot_detection_data.csv')
+    df_1 = pd.read_csv('data/bot_detection_data.csv')
     menu = ['개요', '데이터 분석', '데이터 예측']
     choise = st.sidebar.selectbox('목록', menu)
     
@@ -32,7 +32,7 @@ def main():
     if choise == menu[0]:
         st.image('data/img.jpg') # 수정
         if st.checkbox('데이터프레임 보기'):
-            st.dataframe(df1)
+            st.dataframe(df_1)
         st.text('50000 rows × 11 columns')
         st.subheader('개요')
         st.text('트위터의 활동내역을 보고 AI인지 아닌지 예측합니다.')
@@ -46,7 +46,7 @@ def main():
         
         st.subheader('출처')
         st.text('kaggle Twitter-Bot Detection Dataset')
-        st.text('https://www.kaggle.com/datasets/goyaladi/twitter-bot-detection-dataset?select=bot_detection_data.csv')
+        st.markdown('https://www.kaggle.com/datasets/goyaladi/twitter-bot-detection-dataset?select=bot_detection_data.csv')
 
     elif choise == menu[1]:
         import platform
@@ -74,15 +74,36 @@ def main():
         for i in set(df.columns) - set(lb_list) - {'Created At'}:
             st.text(f'{i}의 {select_calcul}: {eval(calculator[select_calcul])}')
 
+
+
+
         st.subheader('상관관계')
-        df_corr = df.corr()
+
+        df0 = df[df['Bot Label'] == 0].drop('Bot Label', axis=1)
+        df1 = df[df['Bot Label'] == 1].drop('Bot Label', axis=1)
+
         fig = plt.figure()
-        plt.title('간략한 상관관계(%)')
-        sns.heatmap(data=df.corr(numeric_only=True).loc[:, :] * 100, annot=True, vmin=-100, vmax=100, cmap='coolwarm', fmt='.1f', linewidths=1)
+        df0_corr = df0.corr()
+        mask1 = np.array(df0_corr)
+        mask1[np.tril_indices_from(mask1)]=False #상삼각행렬 False -> 하삼각행렬
+        plt.title('상관관계(%)')
+        sns.heatmap(data=df0_corr, annot=True, vmin=-1, vmax=1, cmap='coolwarm', fmt='.2f', linewidths=1, mask=mask1)
         st.pyplot(fig)
 
-        for i in df.columns:
-            df_corr.loc[abs(df_corr[i]) < 0.1, i] = np.NaN
+        fig = plt.figure()
+        df1_corr = df1.corr()
+        mask2 = np.array(df1_corr)
+        mask2[np.tril_indices_from(mask2)]=False #상삼각행렬 False -> 하삼각행렬
+        plt.title('상관관계(%)')
+        sns.heatmap(data=df1_corr, annot=True, vmin=-1, vmax=1, cmap='coolwarm', fmt='.2f', linewidths=1, mask=mask2)
+        st.pyplot(fig)
+
+        fig = plt.figure()
+        df_corr = df.corr()
+        plt.title('상관관계(%)')
+        sns.heatmap(data=df_corr, annot=True, vmin=-1, vmax=1, cmap='coolwarm', fmt='.2f', linewidths=1)
+        st.pyplot(fig)
+        st.dataframe(df)
 
 
     elif choise == menu[2]:
