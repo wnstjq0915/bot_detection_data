@@ -80,6 +80,8 @@ def main():
         st.header('원본 상관관계')
         st.dataframe(df_1)
 
+        st.dataframe(df_1.corr(numeric_only=True))
+
         fig = plt.figure()
         df_1_corr = df_1.corr(numeric_only=True)
         sns.heatmap(data=df_1_corr, annot=True, vmin=-1, vmax=1, cmap='coolwarm', fmt='.2f', linewidths=1)
@@ -98,7 +100,7 @@ def main():
         mask1 = np.array(df0_corr)
         mask1[np.tril_indices_from(mask1)]=False #상삼각행렬 False -> 하삼각행렬
         plt.title('상관관계(%)')
-        sns.heatmap(data=df0_corr, annot=True, vmin=-1, vmax=1, cmap='coolwarm', fmt='.2f', linewidths=1, mask=mask1)
+        sns.heatmap(data=df0_corr, annot=True, vmin=-1, vmax=1, cmap='coolwarm', fmt='.1f', linewidths=1, mask=mask1)
         st.pyplot(fig)
 
         fig = plt.figure()
